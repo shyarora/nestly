@@ -6,11 +6,15 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "build:static": "GITHUB_PAGES=true next build && mkdir -p dist && cp -r .next/server/app/* dist/ && cp -r .next/static dist/_next && cp -r public/* dist/ 2>/dev/null || true",
     "start": "next start",
     "lint": "next lint --dir src --dir components --dir lib --dir store --dir types",
+    "lint:fix": "next lint --dir src --dir components --dir lib --dir store --dir types --fix",
     "export": "next build && next export",
-    "deploy": "npm run build",
-    "type-check": "tsc --noEmit --project tsconfig.json"
+    "deploy": "npm run build:static",
+    "type-check": "tsc --noEmit --project tsconfig.json",
+    "clean": "rm -rf dist out .next",
+    "test:build": "npm run clean && npm run build:static"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
