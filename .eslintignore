@@ -1,0 +1,8 @@
+backend/
+backend/**/*
+node_modules/
+.next/
+out/
+dist/
+coverage/
+*.d.ts

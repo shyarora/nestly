@@ -1,33 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
+  trailingSlash: true,
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'plus.unsplash.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'api.dicebear.com',
-        port: '',
-        pathname: '/**',
-      },
-    ],
+    unoptimized: true
   },
+  // Remove basePath and assetPrefix for custom domain
+  // basePath: process.env.NODE_ENV === 'production' ? '/portfolio' : '',
+  // assetPrefix: process.env.NODE_ENV === 'production' ? '/portfolio' : '',
 }
 
 module.exports = nextConfig

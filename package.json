@@ -2,19 +2,19 @@
   "name": "nestly",
   "version": "0.1.0",
   "private": true,
-  "description": "A NestJS and Next.js application",
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build && npm run export",
-    "export": "mkdir -p out && cp -r .next/server/app/* out/ && mkdir -p out/_next && cp -r .next/static out/_next/ && cp public/.nojekyll out/",
-    "serve": "cd out && python3 -m http.server 3000",
-    "start": "next start",
-    "lint": "next lint --dir src --dir components --dir lib --dir store --dir types",
-    "lint:fix": "next lint --dir src --dir components --dir lib --dir store --dir types --fix",
-    "type-check": "tsc --noEmit --project tsconfig.json",
-    "clean": "rm -rf out .next"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "npx serve@latest out",
+    "preview": "npm run build && npx serve@latest out",
+    "lint": "next lint"
   },
   "dependencies": {
+    "next": "15.4.1",
+    "react": "^18",
+    "react-dom": "^18",
+    "framer-motion": "^10.16.16",
+    "lucide-react": "^0.294.0",
     "@hookform/resolvers": "^5.1.1",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-dialog": "^1.1.14",
@@ -26,10 +26,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
-    "lucide-react": "^0.525.0",
-    "next": "15.4.1",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
     "react-hook-form": "^7.60.0",
     "react-hot-toast": "^2.5.2",
     "tailwind-merge": "^3.3.1",
@@ -38,14 +34,14 @@
     "zustand": "^5.0.6"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
+    "typescript": "^5",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
     "eslint-config-next": "15.4.1",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0"
   }
 }
