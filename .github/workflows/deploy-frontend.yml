@@ -37,12 +37,11 @@ jobs:
         with:
           static_site_generator: next
 
-      - name: Build Next.js app
-        run: npm run build
-        env:
-          NODE_ENV: production
-
-      - name: Upload artifact
+    - name: Build Next.js app
+      run: npm run build
+      env:
+        NODE_ENV: production
+        NEXT_PUBLIC_GRAPHQL_URL: ${{ secrets.NEXT_PUBLIC_GRAPHQL_URL }}      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist

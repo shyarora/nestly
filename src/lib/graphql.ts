@@ -1,7 +1,7 @@
 // GraphQL client setup using fetch
 import { toast } from "@/components/ui/toast";
 
-const GRAPHQL_ENDPOINT = "http://localhost:4000/graphql";
+const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_URL || "http://localhost:4000/graphql";
 
 export interface GraphQLResponse<T> {
   data?: T;
