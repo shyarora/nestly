@@ -6,7 +6,10 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  assetPrefix: process.env.NODE_ENV === 'production' ? (process.env.PAGES_BASE_PATH || "") : "",
+  assetPrefix:
+    process.env.NODE_ENV === "production"
+      ? process.env.PAGES_BASE_PATH || ""
+      : "",
   basePath: process.env.PAGES_BASE_PATH || "",
 };
 
