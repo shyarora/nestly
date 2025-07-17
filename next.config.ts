@@ -8,8 +8,8 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: process.env.NODE_ENV === "production" ? "/app-clone" : "",
-  assetPrefix: process.env.NODE_ENV === "production" ? "/app-clone/" : "",
+  basePath: process.env.NODE_ENV === "production" ? "/nestly" : "",
+  assetPrefix: process.env.NODE_ENV === "production" ? "/nestly/" : "",
 };
 
 export default nextConfig;

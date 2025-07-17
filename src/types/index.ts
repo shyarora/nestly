@@ -68,7 +68,7 @@ export interface Location {
 export interface Amenity {
   id: string;
   name?: string; // Optional for GraphQL compatibility
-  amenity?: any; // For GraphQL null values
+  amenity?: unknown; // For GraphQL null values - using unknown instead of any
   icon?: string; // Make icon optional to match GraphQL schema
   category?: AmenityCategory; // Optional
 }

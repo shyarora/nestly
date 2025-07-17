@@ -69,7 +69,7 @@ export default function RegisterPage() {
         isHost: false,
       });
       router.push("/");
-    } catch (error) {
+    } catch {
       setErrors({ submit: "Registration failed. Please try again." });
     }
   };

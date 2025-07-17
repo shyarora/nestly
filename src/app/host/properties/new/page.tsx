@@ -78,13 +78,13 @@ export default function NewPropertyPage() {
     ],
   });
 
-  const updateFormData = (field: string, value: any) => {
+  const updateFormData = (field: string, value: unknown) => {
     if (field.includes(".")) {
       const [parent, child] = field.split(".");
       setFormData((prev) => ({
         ...prev,
         [parent]: {
-          ...(prev[parent as keyof typeof prev] as any),
+          ...(prev[parent as keyof typeof prev] as Record<string, unknown>),
           [child]: value,
         },
       }));

@@ -1,19 +1,19 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Heart, Star, MapPin } from 'lucide-react'
-import { Property } from '@/types'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { usePropertyStore } from '@/store/propertyStore'
-import { formatCurrency } from '@/lib/utils'
-import { cn } from '@/lib/utils'
+import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Heart, Star, MapPin } from "lucide-react";
+import { Property } from "@/types";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { usePropertyStore } from "@/store/propertyStore";
+import { formatCurrency } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 interface PropertyCardProps {
-  property: Property
-  className?: string
+  property: Property;
+  className?: string;
 }
 
 export function PropertyCard({ property, className }: PropertyCardProps) {
@@ -24,46 +24,58 @@ export function PropertyCard({ property, className }: PropertyCardProps) {
   const isFavorited = favorites.includes(property.id);
 
   // Helper function to get image URL from either string or object format
-  const getImageUrl = (image: string | { url: string }, index: number): string => {
-    if (typeof image === 'string') {
+  const getImageUrl = (
+    image: string | { url: string },
+    _index: number
+  ): string => {
+    if (typeof image === "string") {
       return image;
     }
     return image.url;
   };
 
-  const handleFavoriteClick = (e: React.MouseEvent) => {    e.preventDefault()
-    e.stopPropagation()
-    toggleFavorite(property.id)
-  }
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(property.id);
+  };
 
   const handleImageError = () => {
-    setImageError(true)
-  }
+    setImageError(true);
+  };
 
   const nextImage = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setCurrentImageIndex((prev) => 
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentImageIndex((prev) =>
       prev === property.images.length - 1 ? 0 : prev + 1
-    )
-  }
+    );
+  };
 
   const prevImage = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setCurrentImageIndex((prev) => 
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentImageIndex((prev) =>
       prev === 0 ? property.images.length - 1 : prev - 1
-    )
-  }
+    );
+  };
 
   return (
     <Link href={`/property/${property.id}`}>
-      <Card className={cn("group cursor-pointer hover:shadow-lg transition-shadow duration-200", className)}>
+      <Card
+        className={cn(
+          "group cursor-pointer hover:shadow-lg transition-shadow duration-200",
+          className
+        )}
+      >
         <div className="relative aspect-square overflow-hidden rounded-t-lg">
           {/* Main Image */}
           {!imageError && property.images.length > 0 ? (
             <Image
-              src={getImageUrl(property.images[currentImageIndex], currentImageIndex)}
+              src={getImageUrl(
+                property.images[currentImageIndex],
+                currentImageIndex
+              )}
               alt={property.title}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-200"
@@ -83,8 +95,18 @@ export function PropertyCard({ property, className }: PropertyCardProps) {
                 className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                 aria-label="Previous image"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
                 </svg>
               </button>
               <button
@@ -92,8 +114,18 @@ export function PropertyCard({ property, className }: PropertyCardProps) {
                 className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                 aria-label="Next image"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </button>
             </>
@@ -134,10 +166,9 @@ export function PropertyCard({ property, className }: PropertyCardProps) {
           {/* Location */}
           <div className="flex items-center text-sm text-gray-600 mb-1">
             <MapPin className="h-3 w-3 mr-1" />
-            {property.location ? 
-              `${property.location.city}, ${property.location.state}` : 
-              `${property.city}, ${property.state}`
-            }
+            {property.location
+              ? `${property.location.city}, ${property.location.state}`
+              : `${property.city}, ${property.state}`}
           </div>
 
           {/* Title */}
@@ -147,7 +178,8 @@ export function PropertyCard({ property, className }: PropertyCardProps) {
 
           {/* Property Details */}
           <div className="text-sm text-gray-600 mb-2">
-            {property.maxGuests} guests · {property.bedrooms} bedrooms · {property.bathrooms} bathrooms
+            {property.maxGuests} guests · {property.bedrooms} bedrooms ·{" "}
+            {property.bathrooms} bathrooms
           </div>
 
           {/* Rating */}
@@ -173,5 +205,5 @@ export function PropertyCard({ property, className }: PropertyCardProps) {
         </CardContent>
       </Card>
     </Link>
-  )
+  );
 }

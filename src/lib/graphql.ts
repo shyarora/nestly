@@ -25,7 +25,7 @@ class GraphQLClient {
     this.endpoint = endpoint;
   }
 
-  async query<T>(query: string, variables?: Record<string, any>): Promise<T> {
+  async query<T>(query: string, variables?: Record<string, unknown>): Promise<T> {
     try {
       const response = await fetch(this.endpoint, {
         method: "POST",
@@ -80,7 +80,7 @@ class GraphQLClient {
 
   async mutate<T>(
     mutation: string,
-    variables?: Record<string, any>
+    variables?: Record<string, unknown>
   ): Promise<T> {
     return this.query<T>(mutation, variables);
   }

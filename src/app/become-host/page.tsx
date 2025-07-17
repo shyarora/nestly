@@ -5,11 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import {
-  HomeIcon,
-  CalendarIcon,
   DollarSignIcon,
   UsersIcon,
   ShieldCheckIcon,
@@ -197,7 +194,7 @@ export default function BecomeHostPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              It's easy to get started
+              It&apos;s easy to get started on Nestly
             </h2>
           </div>
 

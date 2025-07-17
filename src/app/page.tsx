@@ -8,8 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export default function Home() {
-  const { properties, searchProperties, loadProperties, isLoading } =
-    usePropertyStore();
+  const { properties, loadProperties, isLoading } = usePropertyStore();
 
   useEffect(() => {
     // Load initial properties from GraphQL

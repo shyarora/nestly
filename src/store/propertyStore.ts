@@ -1,5 +1,11 @@
 import { create } from "zustand";
-import { Property, SearchFilters, SearchResult } from "@/types";
+import {
+  Property,
+  SearchFilters,
+  SearchResult,
+  PropertyType,
+  RoomType,
+} from "@/types";
 import {
   graphqlClient,
   GET_PROPERTIES,
@@ -33,8 +39,8 @@ const transformProperty = (gqlProperty: GraphQLProperty): Property => ({
     location: "",
   },
   images: gqlProperty.images.map((img) => img.url), // Frontend expects array of strings
-  propertyType: gqlProperty.propertyType as any, // Type casting for enum
-  roomType: gqlProperty.roomType as any, // Type casting for enum
+  propertyType: gqlProperty.propertyType as PropertyType, // Type casting for enum
+  roomType: gqlProperty.roomType as RoomType, // Type casting for enum
   beds: gqlProperty.bedrooms, // Approximation
   cleaningFee: gqlProperty.cleaningFee || 0,
   serviceFee: gqlProperty.serviceFee || 0,

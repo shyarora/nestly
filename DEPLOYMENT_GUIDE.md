@@ -64,7 +64,17 @@ This guide will help you deploy your Nestly application with:
    DATABASE_URL=postgresql://postgres:[YOUR_PASSWORD]@db.[YOUR_PROJECT_REF].supabase.co:5432/postgres
    DIRECT_URL=postgresql://postgres:[YOUR_PASSWORD]@db.[YOUR_PROJECT_REF].supabase.co:5432/postgres
    JWT_SECRET=your-super-secure-jwt-secret-change-this
-   CORS_ORIGINS=https://[YOUR_GITHUB_USERNAME].github.io
+   CORS_ORIGINS=https://[YOUR_GITHUB_USERNAME].github.io/nestly
+   ```
+
+   Create `.env.production` for production:
+
+   ```
+   NEXT_PUBLIC_API_URL=https://your-backend-url.onrender.com
+   ```
+
+   ```
+
    ```
 
 4. **Deploy**
@@ -127,7 +137,7 @@ This guide will help you deploy your Nestly application with:
 
 1. **Test Frontend**
 
-   - Visit `https://[your-username].github.io/app-clone`
+   - Visit `https://[your-username].github.io/nestly`
    - Check all pages load correctly
    - Test user registration/login
 

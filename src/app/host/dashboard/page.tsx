@@ -11,7 +11,6 @@ import {
   HomeIcon,
   CalendarIcon,
   DollarSignIcon,
-  UsersIcon,
   MessageSquareIcon,
   BarChart3Icon,
   SettingsIcon,
@@ -21,7 +20,6 @@ import {
   TrashIcon,
   StarIcon,
   TrendingUpIcon,
-  TrendingDownIcon,
 } from "lucide-react";
 
 export default function HostDashboardPage() {

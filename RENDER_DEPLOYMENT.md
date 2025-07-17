@@ -4,7 +4,7 @@
 
 ### Build and Start Commands
 
-- **Build Command**: `npm install && npm run build && npx prisma generate`
+- **Build Command**: `npm install && npm run build`
 - **Start Command**: `npm start`
 
 ### Environment Variables
@@ -17,7 +17,8 @@ PORT=4000
 DATABASE_URL=postgresql://postgres:[PASSWORD]@db.[PROJECT_REF].supabase.co:5432/postgres
 DIRECT_URL=postgresql://postgres:[PASSWORD]@db.[PROJECT_REF].supabase.co:5432/postgres
 JWT_SECRET=your-super-secure-jwt-secret-for-production
-CORS_ORIGINS=https://[your-username].github.io
+CORS_ORIGINS=https://[your-username].github.io/nestly
+FRONTEND_URL=https://[your-username].github.io/nestly
 ```
 
 ### Auto-Deploy

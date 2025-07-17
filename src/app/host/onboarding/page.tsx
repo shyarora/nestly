@@ -7,14 +7,16 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { PropertyType, RoomType, AmenityCategory } from "@/types";
 import {
-  HomeIcon,
   MapPinIcon,
-  UsersIcon,
-  BedIcon,
-  BathIcon,
+  HomeIcon,
+  ImageIcon,
   DollarSignIcon,
-  CameraIcon,
   CheckIcon,
+  ChevronRightIcon,
+  ChevronLeftIcon,
+  PlusIcon,
+  UsersIcon,
+  CameraIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
 } from "lucide-react";
@@ -84,13 +86,13 @@ export default function HostOnboardingPage() {
     }
   };
 
-  const updatePropertyData = (field: string, value: any) => {
+  const updatePropertyData = (field: string, value: unknown) => {
     if (field.includes(".")) {
       const [parent, child] = field.split(".");
       setPropertyData((prev) => ({
         ...prev,
         [parent]: {
-          ...(prev[parent as keyof typeof prev] as any),
+          ...(prev[parent as keyof typeof prev] as Record<string, unknown>),
           [child]: value,
         },
       }));
@@ -119,7 +121,7 @@ export default function HostOnboardingPage() {
                 What kind of place will you host?
               </h2>
               <p className="text-gray-600">
-                Choose the type of property you're listing
+                Choose the type of property you&apos;re listing
               </p>
             </div>
 
@@ -185,7 +187,7 @@ export default function HostOnboardingPage() {
             <div className="text-center">
               <MapPinIcon className="h-16 w-16 text-rose-600 mx-auto mb-4" />
               <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                Where's your place located?
+                Where&apos;s your place located?
               </h2>
               <p className="text-gray-600">
                 Your address is only shared with guests after they book
@@ -429,8 +431,8 @@ export default function HostOnboardingPage() {
                 Add some photos of your place
               </h2>
               <p className="text-gray-600">
-                You'll need at least 5 photos to get started. You can add more
-                later.
+                You&apos;ll need at least 5 photos to get started. You can add
+                more later.
               </p>
             </div>
 
@@ -444,8 +446,8 @@ export default function HostOnboardingPage() {
               </div>
 
               <p className="text-sm text-gray-500 mt-4 text-center">
-                For now, we'll use some sample photos. You can update them later
-                in your dashboard.
+                For now, we&apos;ll use some sample photos. You can update them
+                later in your dashboard.
               </p>
             </div>
           </div>
