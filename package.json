@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build && npm run export",
-    "export": "mkdir -p out && cp -r .next/server/app/* out/ && mkdir -p out/_next && cp -r .next/static out/_next/",
+    "export": "mkdir -p out && cp -r .next/server/app/* out/ && mkdir -p out/_next && cp -r .next/static out/_next/ && cp public/.nojekyll out/",
     "serve": "cd out && python3 -m http.server 3000",
     "start": "next start",
     "lint": "next lint --dir src --dir components --dir lib --dir store --dir types",
