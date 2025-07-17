@@ -2,9 +2,11 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useAuthStore } from "@/store/authStore";
 import { usePropertyStore } from "@/store/propertyStore";
 import { useBookingStore } from "@/store/bookingStore";
+import { PropertyImage } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -22,7 +24,12 @@ import {
   TrendingUpIcon,
 } from "lucide-react";
 
-export default function HostDashboardPage() {
+// Helper function to get image URL from either string or PropertyImage object
+const getImageUrl = (image: string | PropertyImage): string => {
+  return typeof image === 'string' ? image : image.url;
+};
+
+export default function HostDashboard() {
   const { user } = useAuthStore();
   const { properties } = usePropertyStore();
   const { bookings } = useBookingStore();
@@ -240,9 +247,11 @@ export default function HostDashboardPage() {
         {hostProperties.map((property) => (
           <Card key={property.id} className="overflow-hidden">
             <div className="relative">
-              <img
-                src={property.images[0]}
+              <Image
+                src={getImageUrl(property.images[0])}
                 alt={property.title}
+                width={400}
+                height={192}
                 className="w-full h-48 object-cover"
               />
               <div className="absolute top-2 right-2 flex space-x-1">
@@ -264,7 +273,7 @@ export default function HostDashboardPage() {
             <div className="p-4">
               <h3 className="font-semibold mb-2">{property.title}</h3>
               <p className="text-sm text-gray-600 mb-2">
-                {property.location.city}, {property.location.state}
+                {property.location?.city || property.city}, {property.location?.state || property.state}
               </p>
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
@@ -340,13 +349,15 @@ export default function HostDashboardPage() {
                 <tr key={booking.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <img
+                      <Image
                         className="h-8 w-8 rounded-full"
                         src={
                           booking.guest.avatar ||
                           "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face"
                         }
                         alt=""
+                        width={32}
+                        height={32}
                       />
                       <div className="ml-3">
                         <div className="text-sm font-medium text-gray-900">
@@ -363,7 +374,7 @@ export default function HostDashboardPage() {
                       {booking.property.title}
                     </div>
                     <div className="text-sm text-gray-500">
-                      {booking.property.location.city}
+                      {booking.property.location?.city || booking.property.city}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -476,7 +487,7 @@ export default function HostDashboardPage() {
                 </div>
                 <div className="text-right">
                   <p className="font-semibold">
-                    ${property.pricePerNight * property.reviewCount}
+                    ${property.pricePerNight * (property.reviewCount || 0)}
                   </p>
                   <p className="text-sm text-gray-600">Revenue</p>
                 </div>

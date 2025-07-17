@@ -18,11 +18,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isAuthenticated: false,
   isLoading: false,
 
-  login: async (email: string, _password: string) => {
+  login: async (email: string, password: string) => {
     set({ isLoading: true });
 
     // Mock login - simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    // In a real app, password would be validated against backend
+    console.log("Login attempt with password:", password);
 
     // Find user by email (in real app, this would be handled by backend)
     const mockUser: User = {

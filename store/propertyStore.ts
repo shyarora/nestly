@@ -36,9 +36,12 @@ export const usePropertyStore = create<PropertyState>((set, get) => ({
       const searchTerm = filters.location.toLowerCase();
       filteredProperties = filteredProperties.filter(
         (property) =>
-          property.location.city.toLowerCase().includes(searchTerm) ||
-          property.location.state.toLowerCase().includes(searchTerm) ||
-          property.location.country.toLowerCase().includes(searchTerm) ||
+          property.location?.city.toLowerCase().includes(searchTerm) ||
+          property.location?.state.toLowerCase().includes(searchTerm) ||
+          property.location?.country.toLowerCase().includes(searchTerm) ||
+          property.city?.toLowerCase().includes(searchTerm) ||
+          property.state?.toLowerCase().includes(searchTerm) ||
+          property.country?.toLowerCase().includes(searchTerm) ||
           property.title.toLowerCase().includes(searchTerm)
       );
     }
@@ -75,7 +78,7 @@ export const usePropertyStore = create<PropertyState>((set, get) => ({
 
     if (filters.minRating) {
       filteredProperties = filteredProperties.filter(
-        (property) => property.rating >= filters.minRating!
+        (property) => (property.rating || 0) >= filters.minRating!
       );
     }
 

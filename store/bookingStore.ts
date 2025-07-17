@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Booking, BookingForm, BookingStatus } from "@/types";
+import { Booking, BookingForm, BookingStatus, Property, User } from "@/types";
 import { mockBookings } from "@/data/mockData";
 
 interface BookingState {
@@ -33,9 +33,9 @@ export const useBookingStore = create<BookingState>((set, get) => ({
     const newBooking: Booking = {
       id: Math.random().toString(36).substr(2, 9),
       propertyId: bookingData.propertyId,
-      property: {} as any, // Will be populated in real app
+      property: {} as Property, // Will be populated in real app
       guestId: bookingData.guestId,
-      guest: {} as any, // Will be populated in real app
+      guest: {} as User, // Will be populated in real app
       checkIn: bookingData.checkIn,
       checkOut: bookingData.checkOut,
       guests: bookingData.guests,

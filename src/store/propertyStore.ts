@@ -5,6 +5,7 @@ import {
   SearchResult,
   PropertyType,
   RoomType,
+  AmenityCategory,
 } from "@/types";
 import {
   graphqlClient,
@@ -35,6 +36,7 @@ const transformProperty = (gqlProperty: GraphQLProperty): Property => ({
     name: `${gqlProperty.host.firstName} ${gqlProperty.host.lastName}`,
     bio: "",
     joinedAt: new Date(gqlProperty.host.createdAt),
+    createdAt: new Date(gqlProperty.host.createdAt),
     phoneNumber: "",
     location: "",
   },
@@ -56,7 +58,7 @@ const transformProperty = (gqlProperty: GraphQLProperty): Property => ({
       id: amenity.amenity!.id,
       name: amenity.amenity!.name,
       icon: amenity.amenity!.icon,
-      category: amenity.amenity!.category,
+      category: amenity.amenity!.category as AmenityCategory,
     })),
 });
 
@@ -141,7 +143,7 @@ export const usePropertyStore = create<PropertyState>((set, get) => ({
 
       if (filters.minRating) {
         properties = properties.filter(
-          (property) => property.rating >= filters.minRating!
+          (property) => (property.rating || 0) >= filters.minRating!
         );
       }
 

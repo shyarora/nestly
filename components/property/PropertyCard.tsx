@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Heart, Star, MapPin } from "lucide-react";
-import { Property } from "@/types";
+import { Property, PropertyImage } from "@/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { usePropertyStore } from "@/store/propertyStore";
@@ -15,6 +15,11 @@ interface PropertyCardProps {
   property: Property;
   className?: string;
 }
+
+// Helper function to get image URL from either string or PropertyImage object
+const getImageUrl = (image: string | PropertyImage): string => {
+  return typeof image === 'string' ? image : image.url;
+};
 
 export function PropertyCard({ property, className }: PropertyCardProps) {
   const { favorites, toggleFavorite } = usePropertyStore();
@@ -61,7 +66,7 @@ export function PropertyCard({ property, className }: PropertyCardProps) {
           {/* Main Image */}
           {!imageError && property.images.length > 0 ? (
             <Image
-              src={property.images[currentImageIndex]}
+              src={getImageUrl(property.images[currentImageIndex])}
               alt={property.title}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-200"
@@ -152,7 +157,7 @@ export function PropertyCard({ property, className }: PropertyCardProps) {
           {/* Location */}
           <div className="flex items-center text-sm text-gray-600 mb-1">
             <MapPin className="h-3 w-3 mr-1" />
-            {property.location.city}, {property.location.state}
+            {property.location?.city || property.city}, {property.location?.state || property.state}
           </div>
 
           {/* Title */}
@@ -167,15 +172,17 @@ export function PropertyCard({ property, className }: PropertyCardProps) {
           </div>
 
           {/* Rating */}
-          <div className="flex items-center mb-3">
-            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
-            <span className="text-sm font-medium text-gray-900">
-              {property.rating.toFixed(1)}
-            </span>
-            <span className="text-sm text-gray-600 ml-1">
-              ({property.reviewCount} reviews)
-            </span>
-          </div>
+          {property.rating && (
+            <div className="flex items-center mb-3">
+              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
+              <span className="text-sm font-medium text-gray-900">
+                {property.rating.toFixed(1)}
+              </span>
+              <span className="text-sm text-gray-600 ml-1">
+                ({property.reviewCount || 0} reviews)
+              </span>
+            </div>
+          )}
 
           {/* Price */}
           <div className="flex items-baseline">

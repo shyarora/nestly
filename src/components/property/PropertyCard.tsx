@@ -25,8 +25,7 @@ export function PropertyCard({ property, className }: PropertyCardProps) {
 
   // Helper function to get image URL from either string or object format
   const getImageUrl = (
-    image: string | { url: string },
-    _index: number
+    image: string | { url: string }
   ): string => {
     if (typeof image === "string") {
       return image;
@@ -72,10 +71,7 @@ export function PropertyCard({ property, className }: PropertyCardProps) {
           {/* Main Image */}
           {!imageError && property.images.length > 0 ? (
             <Image
-              src={getImageUrl(
-                property.images[currentImageIndex],
-                currentImageIndex
-              )}
+              src={getImageUrl(property.images[currentImageIndex])}
               alt={property.title}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-200"

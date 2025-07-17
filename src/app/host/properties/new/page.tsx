@@ -111,27 +111,23 @@ export default function NewPropertyPage() {
     try {
       // Create property data
       const propertyData = {
-        ...formData,
-        hostId: user.id,
-        host: user,
-        location: {
-          ...formData.location,
-          latitude: 37.7749, // Mock coordinates
-          longitude: -122.4194,
-        },
-        amenities: formData.amenities.map((id) => ({
-          id,
-          name: amenities.find((a) => a.id === id)?.name || "",
-          icon: "",
-          category:
-            amenities.find((a) => a.id === id)?.category ||
-            AmenityCategory.BASICS,
-        })),
-        rating: 0,
-        reviewCount: 0,
-        isAvailable: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        title: formData.title,
+        description: formData.description,
+        propertyType: formData.propertyType,
+        roomType: formData.roomType,
+        maxGuests: formData.maxGuests,
+        bedrooms: formData.bedrooms,
+        bathrooms: formData.bathrooms,
+        pricePerNight: formData.pricePerNight,
+        cleaningFee: formData.cleaningFee,
+        city: formData.location.city,
+        state: formData.location.state,
+        country: formData.location.country,
+        address: formData.location.address,
+        latitude: 37.7749, // Mock coordinates
+        longitude: -122.4194,
+        minimumStay: 1,
+        maximumStay: 30,
       };
 
       await addProperty(propertyData);

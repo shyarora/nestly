@@ -2,12 +2,12 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Search, Menu, User, Globe, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuthStore } from "@/store/authStore";
-import { cn } from "@/lib/utils";
 
 export function Header() {
   const router = useRouter();
@@ -104,9 +104,11 @@ export function Header() {
               >
                 <Menu className="h-4 w-4" />
                 {isAuthenticated && user?.avatar ? (
-                  <img
+                  <Image
                     src={user.avatar}
                     alt={`${user.firstName} ${user.lastName}`}
+                    width={24}
+                    height={24}
                     className="w-6 h-6 rounded-full"
                   />
                 ) : (

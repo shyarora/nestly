@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Review, ReviewForm } from "@/types";
+import { Review, ReviewForm, Property, User } from "@/types";
 import { mockReviews } from "@/data/mockData";
 
 interface ReviewState {
@@ -42,9 +42,9 @@ export const useReviewStore = create<ReviewState>((set, get) => ({
     const newReview: Review = {
       id: Math.random().toString(36).substr(2, 9),
       propertyId: reviewData.propertyId,
-      property: {} as any, // Will be populated in real app
+      property: {} as Property, // Will be populated in real app
       reviewerId: reviewData.reviewerId,
-      reviewer: {} as any, // Will be populated in real app
+      reviewer: {} as User, // Will be populated in real app
       rating: reviewData.rating,
       comment: reviewData.comment,
       accuracy: reviewData.accuracy,

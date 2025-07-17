@@ -9,12 +9,8 @@ import { PropertyType, RoomType, AmenityCategory } from "@/types";
 import {
   MapPinIcon,
   HomeIcon,
-  ImageIcon,
   DollarSignIcon,
   CheckIcon,
-  ChevronRightIcon,
-  ChevronLeftIcon,
-  PlusIcon,
   UsersIcon,
   CameraIcon,
   ArrowLeftIcon,
