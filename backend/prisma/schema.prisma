@@ -1,0 +1,183 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// User model
+model User {
+  id          String   @id @default(uuid()) @db.Uuid
+  email       String   @unique
+  password    String?  // Make password optional for now
+  firstName   String   @map("first_name")
+  lastName    String   @map("last_name")
+  phoneNumber String?  @map("phone") // Add phone number field
+  bio         String?  // Add bio field for profiles
+  avatar      String?  @map("avatar_url")
+  isHost      Boolean  @default(false) @map("is_host")
+  isVerified  Boolean  @default(false) @map("is_verified")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  hostedProperties Property[] @relation("HostProperties")
+  bookings         Booking[]
+  reviews          Review[]   @relation("ReviewsByUser")
+  receivedReviews  Review[]   @relation("ReviewsForHost")
+  sentMessages     Message[]  @relation("SentMessages")
+  receivedMessages Message[]  @relation("ReceivedMessages")
+  favorites        Favorite[]
+  
+  @@map("users")
+}
+
+// Property model
+model Property {
+  id              String   @id @default(uuid()) @db.Uuid
+  title           String
+  description     String
+  hostId          String   @map("host_id") @db.Uuid
+  propertyType    String   @map("property_type")
+  maxGuests       Int      @map("max_guests")
+  bedrooms        Int
+  bathrooms       Int
+  pricePerNight   Decimal  @map("price_per_night") @db.Decimal(10, 2)
+  city            String
+  state           String
+  country         String
+  address         String?
+  latitude        Decimal? @db.Decimal(10, 8)
+  longitude       Decimal? @db.Decimal(11, 8)
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  host         User        @relation("HostProperties", fields: [hostId], references: [id])
+  bookings     Booking[]
+  reviews      Review[]
+  images       PropertyImage[]
+  amenities    PropertyAmenity[]
+  favorites    Favorite[]
+  
+  @@map("properties")
+}
+
+// Property Images
+model PropertyImage {
+  id         String  @id @default(uuid()) @db.Uuid
+  propertyId String  @map("property_id") @db.Uuid
+  url        String
+  altText    String? @map("alt_text")
+  isPrimary  Boolean @default(false) @map("is_primary")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  
+  @@map("property_images")
+}
+
+// Amenities
+model Amenity {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique
+  icon      String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  properties PropertyAmenity[]
+  
+  @@map("amenities")
+}
+
+// Property Amenities (Many-to-Many)
+model PropertyAmenity {
+  propertyId String @map("property_id") @db.Uuid
+  amenityId  String @map("amenity_id") @db.Uuid
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  amenity  Amenity  @relation(fields: [amenityId], references: [id], onDelete: Cascade)
+  
+  @@id([propertyId, amenityId])
+  @@map("property_amenities")
+}
+
+// Booking model
+model Booking {
+  id            String   @id @default(uuid()) @db.Uuid
+  propertyId    String   @map("property_id") @db.Uuid
+  guestId       String   @map("guest_id") @db.Uuid
+  checkIn       DateTime @map("check_in") @db.Date
+  checkOut      DateTime @map("check_out") @db.Date
+  guests        Int
+  totalPrice    Decimal  @map("total_price") @db.Decimal(10, 2)
+  status        String   @default("pending")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  property Property @relation(fields: [propertyId], references: [id])
+  guest    User     @relation(fields: [guestId], references: [id])
+  review   Review?
+  messages Message[]
+  
+  @@map("bookings")
+}
+
+// Review model
+model Review {
+  id            String   @id @default(uuid()) @db.Uuid
+  bookingId     String   @unique @map("booking_id") @db.Uuid
+  propertyId    String   @map("property_id") @db.Uuid
+  reviewerId    String   @map("reviewer_id") @db.Uuid
+  rating        Int
+  comment       String?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  property  Property @relation(fields: [propertyId], references: [id])
+  reviewer  User     @relation("ReviewsByUser", fields: [reviewerId], references: [id])
+  
+  @@map("reviews")
+}
+
+// Messages model
+model Message {
+  id          String   @id @default(uuid()) @db.Uuid
+  senderId    String   @map("sender_id") @db.Uuid
+  recipientId String   @map("recipient_id") @db.Uuid
+  bookingId   String?  @map("booking_id") @db.Uuid
+  content     String
+  isRead      Boolean  @default(false) @map("is_read")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  sender    User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  recipient User     @relation("ReceivedMessages", fields: [recipientId], references: [id], onDelete: Cascade)
+  booking   Booking? @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  
+  @@map("messages")
+}
+
+// Favorites model
+model Favorite {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  propertyId String   @map("property_id") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, propertyId])
+  @@map("favorites")
+}
