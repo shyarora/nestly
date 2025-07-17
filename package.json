@@ -2,6 +2,7 @@
   "name": "nestly",
   "version": "0.1.0",
   "private": true,
+  "description": "A NestJS and Next.js application",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
