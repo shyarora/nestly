@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
 import { Button } from "@/components/ui/button";
@@ -139,14 +140,18 @@ export default function BecomeHostPage() {
 
             <div className="relative">
               <div className="grid grid-cols-2 gap-4">
-                <img
+                <Image
                   src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=300&fit=crop"
                   alt="Beautiful home"
+                  width={400}
+                  height={300}
                   className="rounded-lg shadow-lg"
                 />
-                <img
+                <Image
                   src="https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=400&h=300&fit=crop"
                   alt="Cozy apartment"
+                  width={400}
+                  height={300}
                   className="rounded-lg shadow-lg mt-8"
                 />
               </div>
@@ -248,9 +253,11 @@ export default function BecomeHostPage() {
             </div>
 
             <div className="relative">
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&h=400&fit=crop"
                 alt="Host dashboard"
+                width={600}
+                height={400}
                 className="rounded-lg shadow-xl"
               />
               <div className="absolute -top-4 -right-4 bg-white p-4 rounded-lg shadow-lg">

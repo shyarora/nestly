@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -559,9 +560,11 @@ export default function NewPropertyPage() {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {formData.images.map((image, index) => (
                 <div key={index} className="relative">
-                  <img
+                  <Image
                     src={image}
                     alt={`Property ${index + 1}`}
+                    width={400}
+                    height={128}
                     className="w-full h-32 object-cover rounded-lg"
                   />
                   <div className="absolute top-2 left-2 bg-white px-2 py-1 rounded text-xs font-medium">
