@@ -18,7 +18,7 @@ interface PropertyCardProps {
 
 // Helper function to get image URL from either string or PropertyImage object
 const getImageUrl = (image: string | PropertyImage): string => {
-  return typeof image === 'string' ? image : image.url;
+  return typeof image === "string" ? image : image.url;
 };
 
 export function PropertyCard({ property, className }: PropertyCardProps) {
@@ -157,7 +157,8 @@ export function PropertyCard({ property, className }: PropertyCardProps) {
           {/* Location */}
           <div className="flex items-center text-sm text-gray-600 mb-1">
             <MapPin className="h-3 w-3 mr-1" />
-            {property.location?.city || property.city}, {property.location?.state || property.state}
+            {property.location?.city || property.city},{" "}
+            {property.location?.state || property.state}
           </div>
 
           {/* Title */}

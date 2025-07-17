@@ -24,9 +24,7 @@ export function PropertyCard({ property, className }: PropertyCardProps) {
   const isFavorited = favorites.includes(property.id);
 
   // Helper function to get image URL from either string or object format
-  const getImageUrl = (
-    image: string | { url: string }
-  ): string => {
+  const getImageUrl = (image: string | { url: string }): string => {
     if (typeof image === "string") {
       return image;
     }

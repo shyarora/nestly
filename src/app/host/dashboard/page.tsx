@@ -26,7 +26,7 @@ import {
 
 // Helper function to get image URL from either string or PropertyImage object
 const getImageUrl = (image: string | PropertyImage): string => {
-  return typeof image === 'string' ? image : image.url;
+  return typeof image === "string" ? image : image.url;
 };
 
 export default function HostDashboard() {
@@ -273,7 +273,8 @@ export default function HostDashboard() {
             <div className="p-4">
               <h3 className="font-semibold mb-2">{property.title}</h3>
               <p className="text-sm text-gray-600 mb-2">
-                {property.location?.city || property.city}, {property.location?.state || property.state}
+                {property.location?.city || property.city},{" "}
+                {property.location?.state || property.state}
               </p>
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
