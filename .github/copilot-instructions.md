@@ -56,3 +56,11 @@ This is a modern property rental platform built with:
 - Implement proper pagination for large datasets
 - Include various property types and locations
 - Generate realistic user profiles and reviews
+
+## File Management Guidelines
+
+- **DO NOT** generate unnecessary .md documentation files
+- Keep only essential documentation (README.md and this instructions file)
+- Avoid creating deployment guides, setup instructions, or temporary documentation files
+- Focus on code implementation rather than documentation generation
+- Use comments in code files for implementation notes instead of separate .md files

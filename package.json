@@ -5,16 +5,14 @@
   "description": "A NestJS and Next.js application",
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
-    "build:static": "GITHUB_PAGES=true next build && mkdir -p dist && cp -r .next/server/app/* dist/ && cp -r .next/static dist/_next && cp -r public/* dist/ 2>/dev/null || true",
+    "build": "next build && npm run export",
+    "export": "mkdir -p out && cp -r .next/server/app/* out/ && mkdir -p out/_next && cp -r .next/static out/_next/",
+    "serve": "cd out && python3 -m http.server 3000",
     "start": "next start",
     "lint": "next lint --dir src --dir components --dir lib --dir store --dir types",
     "lint:fix": "next lint --dir src --dir components --dir lib --dir store --dir types --fix",
-    "export": "next build && next export",
-    "deploy": "npm run build:static",
     "type-check": "tsc --noEmit --project tsconfig.json",
-    "clean": "rm -rf dist out .next",
-    "test:build": "npm run clean && npm run build:static"
+    "clean": "rm -rf out .next"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
