@@ -1,8 +1,10 @@
-import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
+import { eq } from "drizzle-orm";
+import { db } from "../db";
+import { users } from "../db/schema";
 
 export interface Context {
-    prisma: PrismaClient;
+    db: typeof db;
     user?: {
         id: string;
         email: string;
@@ -11,7 +13,7 @@ export interface Context {
     } | null;
 }
 
-export async function createContext(req: any, prisma: PrismaClient): Promise<Context> {
+export async function createContext(req: any): Promise<Context> {
     let user: { id: string; email: string; isHost: boolean } | null = null;
 
     // Extract token from Authorization header
@@ -23,19 +25,21 @@ export async function createContext(req: any, prisma: PrismaClient): Promise<Con
             // For development, accept a mock token
             if (token === "mock-token") {
                 // Create a mock user if it doesn't exist
-                let mockUser = await prisma.user.findUnique({
-                    where: { email: "test@example.com" },
+                let mockUser = await db.query.users.findFirst({
+                    where: eq(users.email, "test@example.com"),
                 });
 
                 if (!mockUser) {
-                    mockUser = await prisma.user.create({
-                        data: {
+                    const newUsers = await db
+                        .insert(users)
+                        .values({
                             email: "test@example.com",
                             firstName: "Test",
                             lastName: "User",
                             isHost: true,
-                        },
-                    });
+                        })
+                        .returning();
+                    mockUser = newUsers[0];
                 }
 
                 user = {
@@ -47,8 +51,8 @@ export async function createContext(req: any, prisma: PrismaClient): Promise<Con
                 // Verify JWT token in production
                 const decoded = jwt.verify(token, process.env.JWT_SECRET) as any;
                 if (decoded.userId) {
-                    const dbUser = await prisma.user.findUnique({
-                        where: { id: decoded.userId },
+                    const dbUser = await db.query.users.findFirst({
+                        where: eq(users.id, decoded.userId),
                     });
 
                     if (dbUser) {
@@ -67,7 +71,7 @@ export async function createContext(req: any, prisma: PrismaClient): Promise<Con
     }
 
     return {
-        prisma,
+        db,
         user,
     };
 }

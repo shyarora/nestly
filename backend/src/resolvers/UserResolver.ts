@@ -2,8 +2,10 @@ import { Resolver, Query, Mutation, Arg, Ctx, Authorized, InputType, Field } fro
 import { IsEmail, MinLength } from "class-validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { eq } from "drizzle-orm";
 import { User } from "../types";
 import { Context } from "../lib/context";
+import { users } from "../db/schema";
 
 @InputType()
 class RegisterInput {
@@ -60,42 +62,44 @@ class UpdateProfileInput {
 export class UserResolver {
     @Query(() => User, { nullable: true })
     @Authorized()
-    async me(@Ctx() { user, prisma }: Context): Promise<User | null> {
+    async me(@Ctx() { user, db }: Context): Promise<User | null> {
         if (!user) return null;
 
-        return prisma.user.findUnique({
-            where: { id: user.id },
-            include: {
+        const result = await db.query.users.findFirst({
+            where: eq(users.id, user.id),
+            with: {
                 hostedProperties: true,
                 bookings: true,
                 reviews: true,
             },
-        }) as unknown as User | null;
+        });
+
+        return result as User | null;
     }
 
     @Query(() => [User])
-    async users(@Ctx() { prisma }: Context): Promise<User[]> {
-        return prisma.user.findMany({
-            orderBy: { createdAt: "desc" },
-        });
+    async users(@Ctx() { db }: Context): Promise<User[]> {
+        return await db.select().from(users).orderBy(users.createdAt);
     }
 
     @Query(() => User, { nullable: true })
-    async user(@Arg("id", () => String) id: string, @Ctx() { prisma }: Context): Promise<User | null> {
-        return prisma.user.findUnique({
-            where: { id },
-            include: {
+    async user(@Arg("id", () => String) id: string, @Ctx() { db }: Context): Promise<User | null> {
+        const result = await db.query.users.findFirst({
+            where: eq(users.id, id),
+            with: {
                 hostedProperties: true,
                 reviews: true,
             },
-        }) as unknown as User | null;
+        });
+
+        return result as unknown as User | null;
     }
 
     @Mutation(() => String)
-    async register(@Arg("input", () => RegisterInput) input: RegisterInput, @Ctx() { prisma }: Context): Promise<string> {
+    async register(@Arg("input", () => RegisterInput) input: RegisterInput, @Ctx() { db }: Context): Promise<string> {
         // Check if user already exists
-        const existingUser = await prisma.user.findUnique({
-            where: { email: input.email },
+        const existingUser = await db.query.users.findFirst({
+            where: eq(users.email, input.email),
         });
 
         if (existingUser) {
@@ -106,16 +110,19 @@ export class UserResolver {
         const hashedPassword = await bcrypt.hash(input.password, 12);
 
         // Create user
-        const user = await prisma.user.create({
-            data: {
+        const newUsers = await db
+            .insert(users)
+            .values({
                 email: input.email,
                 password: hashedPassword,
                 firstName: input.firstName,
                 lastName: input.lastName,
                 phoneNumber: input.phoneNumber,
                 isHost: input.isHost,
-            },
-        });
+            })
+            .returning();
+
+        const user = newUsers[0];
 
         // Generate JWT token
         const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
@@ -126,13 +133,13 @@ export class UserResolver {
     }
 
     @Mutation(() => String)
-    async login(@Arg("input", () => LoginInput) input: LoginInput, @Ctx() { prisma }: Context): Promise<string> {
+    async login(@Arg("input", () => LoginInput) input: LoginInput, @Ctx() { db }: Context): Promise<string> {
         // Find user
-        const user = await prisma.user.findUnique({
-            where: { email: input.email },
+        const user = await db.query.users.findFirst({
+            where: eq(users.email, input.email),
         });
 
-        if (!user) {
+        if (!user || !user.password) {
             throw new Error("Invalid email or password");
         }
 
@@ -152,40 +159,50 @@ export class UserResolver {
 
     @Mutation(() => User)
     @Authorized()
-    async updateProfile(@Arg("input", () => UpdateProfileInput) input: UpdateProfileInput, @Ctx() { user, prisma }: Context): Promise<User> {
+    async updateProfile(@Arg("input", () => UpdateProfileInput) input: UpdateProfileInput, @Ctx() { user, db }: Context): Promise<User> {
         if (!user) {
             throw new Error("Not authenticated");
         }
 
-        return prisma.user.update({
-            where: { id: user.id },
-            data: input,
-        });
+        const updatedUsers = await db
+            .update(users)
+            .set({
+                ...input,
+                updatedAt: new Date(),
+            })
+            .where(eq(users.id, user.id))
+            .returning();
+
+        return updatedUsers[0] as unknown as User;
     }
 
     @Mutation(() => User)
     @Authorized()
-    async becomeHost(@Ctx() { user, prisma }: Context): Promise<User> {
+    async becomeHost(@Ctx() { user, db }: Context): Promise<User> {
         if (!user) {
             throw new Error("Not authenticated");
         }
 
-        return prisma.user.update({
-            where: { id: user.id },
-            data: { isHost: true },
-        });
+        const updatedUsers = await db
+            .update(users)
+            .set({
+                isHost: true,
+                updatedAt: new Date(),
+            })
+            .where(eq(users.id, user.id))
+            .returning();
+
+        return updatedUsers[0] as unknown as User;
     }
 
     @Mutation(() => Boolean)
     @Authorized()
-    async deleteAccount(@Ctx() { user, prisma }: Context): Promise<boolean> {
+    async deleteAccount(@Ctx() { user, db }: Context): Promise<boolean> {
         if (!user) {
             throw new Error("Not authenticated");
         }
 
-        await prisma.user.delete({
-            where: { id: user.id },
-        });
+        await db.delete(users).where(eq(users.id, user.id));
 
         return true;
     }

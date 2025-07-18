@@ -5,8 +5,8 @@ import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import { buildSchema } from "type-graphql";
 import cors from "cors";
-import { PrismaClient } from "@prisma/client";
 import { createContext } from "./lib/context";
+import { client } from "./db";
 import http from "http";
 
 // Use the working simple resolvers instead of complex ones
@@ -14,13 +14,10 @@ import { SimpleUserResolver } from "./resolvers/SimpleUserResolver";
 import { SimplePropertyResolver } from "./resolvers/SimplePropertyResolver";
 import { SimpleAmenityResolver } from "./resolvers/SimpleAmenityResolver";
 
-// Initialize Prisma Client
-const prisma = new PrismaClient();
-
 async function bootstrap() {
     try {
         // Test database connection
-        await prisma.$connect();
+        await client`SELECT 1`;
         console.log("✅ Connected to database");
     } catch (error) {
         console.error("❌ Failed to connect to database:", error);
@@ -79,7 +76,7 @@ async function bootstrap() {
     app.use(
         "/graphql",
         expressMiddleware(server, {
-            context: async ({ req }) => createContext(req, prisma),
+            context: async ({ req }) => createContext(req),
         }),
     );
 
@@ -117,13 +114,13 @@ async function bootstrap() {
 // Handle graceful shutdown
 process.on("SIGINT", async () => {
     console.log("\n🔄 Shutting down gracefully...");
-    await prisma.$disconnect();
+    await client.end();
     process.exit(0);
 });
 
 process.on("SIGTERM", async () => {
     console.log("\n🔄 Shutting down gracefully...");
-    await prisma.$disconnect();
+    await client.end();
     process.exit(0);
 });
 
