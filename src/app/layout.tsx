@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { ToastProvider } from "@/components/ui/toast";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -11,9 +8,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Nestly - Find your perfect stay",
-  description:
-    "Discover and book unique accommodations around the world with Nestly",
+  title: "Nestly - Welcome",
+  description: "Welcome to Nestly",
 };
 
 export default function RootLayout({
@@ -24,12 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} font-sans antialiased min-h-screen flex flex-col`}
+        className={`${inter.variable} font-sans antialiased min-h-screen bg-gray-50`}
       >
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <ToastProvider />
+        <main>{children}</main>
       </body>
     </html>
   );
