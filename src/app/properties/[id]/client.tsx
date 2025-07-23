@@ -39,7 +39,8 @@ export default function PropertyDetailClient() {
             Property not found
           </h2>
           <p className="text-gray-600 mb-6">
-            The property you're looking for doesn't exist or has been removed.
+            The property you&apos;re looking for doesn&apos;t exist or has been
+            removed.
           </p>
           <Link
             href="/properties"
@@ -264,7 +265,7 @@ export default function PropertyDetailClient() {
                 </Link>
 
                 <p className="text-center text-sm text-gray-600 mt-3">
-                  You won't be charged yet
+                  You won&apos;t be charged yet
                 </p>
               </div>
             </div>
