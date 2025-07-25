@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
+import Image from "next/image";
 import { OptionalAuthGuard } from "../../services/auth/components";
 import { GET_PROPERTIES } from "../../services/property";
 import { Search, Filter, MapPin, Star, Users, Bed, Bath } from "lucide-react";
@@ -178,9 +179,11 @@ function PropertyCard({ property }: { property: any }) {
     <Link href={`/properties/${property.id}`} className="group">
       <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
         <div className="aspect-w-16 aspect-h-12 relative">
-          <img
+          <Image
             src={property.images[0] || "/placeholder-property.jpg"}
             alt={property.title}
+            width={400}
+            height={200}
             className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-200"
           />
         </div>

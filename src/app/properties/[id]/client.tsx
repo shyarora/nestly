@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@apollo/client";
+import Image from "next/image";
 import { GET_PROPERTY_BY_ID } from "../../../services/property";
 import {
   ArrowLeft,
@@ -92,9 +93,11 @@ export default function PropertyDetailClient() {
           {/* Property Images */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6">
             <div className="aspect-w-16 aspect-h-12">
-              <img
+              <Image
                 src={property.images[0] || "/placeholder-property.jpg"}
                 alt={property.title}
+                width={600}
+                height={400}
                 className="w-full h-64 md:h-80 object-cover rounded-lg"
               />
             </div>
@@ -102,10 +105,12 @@ export default function PropertyDetailClient() {
               {property.images
                 .slice(1, 5)
                 .map((image: string, index: number) => (
-                  <img
+                  <Image
                     key={index}
                     src={image}
                     alt={`${property.title} ${index + 2}`}
+                    width={300}
+                    height={200}
                     className="w-full h-32 md:h-40 object-cover rounded-lg"
                   />
                 ))}
@@ -156,9 +161,11 @@ export default function PropertyDetailClient() {
                 </h3>
                 <div className="flex items-center">
                   {property.host.avatar ? (
-                    <img
+                    <Image
                       src={property.host.avatar}
                       alt={`${property.host.firstName} ${property.host.lastName}`}
+                      width={48}
+                      height={48}
                       className="w-12 h-12 rounded-full mr-4"
                     />
                   ) : (
