@@ -49,6 +49,23 @@ export const GoogleSignIn: React.FC<GoogleSignInProps> = ({
 }) => {
   const { login, isLoading } = useAuth();
 
+  // Hardcoded fallback for GitHub Pages deployment
+  const getGoogleClientId = () => {
+    const envClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    const hardcodedClientId = "859598107417-njrmkug58htpfi7brh4nqc8ivgsbvn49.apps.googleusercontent.com";
+    
+    console.log('🔍 Google Client ID Debug:', {
+      envClientId: envClientId ? 'Found in env' : 'Missing from env',
+      envValue: envClientId || 'undefined',
+      hardcodedValue: hardcodedClientId,
+      usingFallback: !envClientId,
+      nodeEnv: process.env.NODE_ENV,
+      location: typeof window !== 'undefined' ? window.location.href : 'server-side'
+    });
+    
+    return envClientId || hardcodedClientId;
+  };
+
   const handleGoogleResponse = useCallback(
     async (response: { credential: string }) => {
       try {
@@ -65,8 +82,20 @@ export const GoogleSignIn: React.FC<GoogleSignInProps> = ({
   useEffect(() => {
     const initializeGoogleSignIn = () => {
       if (window.google?.accounts?.id) {
+        const clientId = getGoogleClientId();
+        console.log('🚀 Initializing Google Sign-In:', {
+          clientId: clientId ? 'Found' : 'Missing',
+          clientIdValue: clientId,
+          timestamp: new Date().toISOString()
+        });
+        
+        if (!clientId) {
+          console.error('❌ Google Client ID is not available');
+          return;
+        }
+        
         window.google.accounts.id.initialize({
-          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+          client_id: clientId,
           callback: handleGoogleResponse,
           auto_select: false,
           cancel_on_tap_outside: true,
